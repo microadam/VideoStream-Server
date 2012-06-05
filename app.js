@@ -16,6 +16,7 @@ app.use(function(req, res, next) {
 
 var properties = require('./properties').getProperties()
   , serviceLocator = require('service-locator').createServiceLocator()
+  , logger = require('./lib/logger').create()
   , xmlHandler = require('./lib/xmlHandler').create(serviceLocator)
   , deviceManager = require('./lib/deviceManager').create(serviceLocator)
   , mediaManager = require('./lib/mediaManager').create(serviceLocator)
@@ -23,6 +24,7 @@ var properties = require('./properties').getProperties()
   , main = require('./lib/main');
 
 serviceLocator
+    .register('logger', logger)
     .register('properties', properties)
     .register('xmlHandler', xmlHandler)
     .register('deviceManager', deviceManager)
@@ -32,3 +34,5 @@ serviceLocator
 main.init(app, serviceLocator);
 
 app.listen(8683);
+
+serviceLocator.logger.info('Server Started');
